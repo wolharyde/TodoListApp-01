@@ -81,11 +81,21 @@ router.delete('/todos/:id', async (req, res) => {
 // GET statistics
 router.get('/stats', async (req, res) => {
   try {
-    const completedToday = await Todo.countDocuments({
-      completed: true,
-      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
-    });
-    res.json({ completedToday });
+    const stats = await Todo.aggregate([
+      {
+        $match: { completed: true }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { _id: 1 }
+      }
+    ]);
+    res.json(stats);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
