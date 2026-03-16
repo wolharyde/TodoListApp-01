@@ -28,7 +28,7 @@ router.post('/todos', async (req, res) => {
   }
 });
 
-// PUT (update) a todo
+// PUT update a todo
 router.put('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
