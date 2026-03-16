@@ -1,19 +1,23 @@
-
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const todoRoutes = require('./routes/todoRoutes');
+const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost/todolistapp', { useNewUrlParser: true, useUnifiedTopology: true });
+// MongoDB connection (replace with your actual connection string)
+const uri = "mongodb://localhost:27017/todolistapp";
+mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
+})
 
-app.use('/api', todoRoutes);
+// Routes will be added here
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
 });
