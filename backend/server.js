@@ -16,10 +16,10 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-const todosRouter = require('./routes/todos');
+const todoRouter = require('./routes/todos');
 const statsRouter = require('./routes/stats');
 
-app.use('/api/todos', todosRouter);
+app.use('/api/todos', todoRouter);
 app.use('/api/stats', statsRouter);
 
 app.listen(port, () => {
