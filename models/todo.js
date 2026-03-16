@@ -5,10 +5,7 @@ const todoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: {
-    type: String,
-    required: false
-  },
+  description: String,
   completed: {
     type: Boolean,
     default: false
@@ -17,18 +14,9 @@ const todoSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  completedAt: {
-    type: Date,
-    default: null
-  },
-  notes: {
-    type: String,
-    default: ''
-  },
-  cost: {
-    type: Number,
-    default: 0
-  }
+  completedAt: Date,
+  notes: String,
+  cost: Number
 });
 
 module.exports = mongoose.model('Todo', todoSchema);
