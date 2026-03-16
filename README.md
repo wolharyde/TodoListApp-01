@@ -8,7 +8,7 @@ A web-based todo list application with advanced features for managing, tracking,
 - Item completion tracking
 - Statistics and visualization
 - Notes for completed items
-- Cost/effort tracking
+- Cost/Effort tracking
 
 ## Tech Stack
 
