@@ -3,6 +3,7 @@ import axios from 'axios';
 import TodoList from './components/TodoList';
 import TodoForm from './components/TodoForm';
 import Statistics from './components/Statistics';
+import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -36,7 +37,7 @@ function App() {
       <h1>TodoListApp-01</h1>
       <TodoForm addTodo={addTodo} />
       <TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} />
-      <Statistics todos={todos} />
+      <Statistics />
     </div>
   );
 }
