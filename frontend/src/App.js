@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header>
+        <header className="App-header">
           <h1>TodoListApp-01</h1>
         </header>
         <Switch>
