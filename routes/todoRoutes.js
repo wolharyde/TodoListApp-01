@@ -45,7 +45,7 @@ router.put('/todos/:id', async (req, res) => {
     if (req.body.completed != null) {
       todo.completed = req.body.completed;
       if (todo.completed) {
-        todo.completedAt = Date.now();
+        todo.completedAt = new Date();
       } else {
         todo.completedAt = null;
       }
@@ -85,6 +85,7 @@ router.get('/stats', async (req, res) => {
       completed: true,
       completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
     });
+
     res.json({ completedToday });
   } catch (err) {
     res.status(500).json({ message: err.message });
