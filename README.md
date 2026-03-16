@@ -1,24 +1,28 @@
 # TodoListApp-01
 
-A web-based todo list application with features for managing, tracking, and analyzing todo items.
+A web-based todo list application with advanced features for managing, tracking, and analyzing tasks.
 
 ## Features
+
 - Todo list management
 - Item completion tracking
 - Statistics and visualization
 - Notes for completed items
-- Cost/Effort tracking
+- Cost/effort tracking
 
 ## Tech Stack
+
 - Frontend: React.js
 - Backend: Node.js with Express.js
 - Database: MongoDB
 - Data Visualization: Chart.js
 
 ## Getting Started
+
 (Instructions for setting up and running the project will be added here)
 
 ## API Endpoints
+
 - GET /api/todos: Retrieve all todo items
 - POST /api/todos: Create a new todo item
 - PUT /api/todos/:id: Update a todo item
@@ -26,7 +30,9 @@ A web-based todo list application with features for managing, tracking, and anal
 - GET /api/stats: Retrieve completion statistics
 
 ## Contributing
-(Guidelines for contributing to the project will be added here)
+
+(Instructions for contributing to the project will be added here)
 
 ## License
-(License information will be added here)
+
+This project is licensed under the MIT License.
