@@ -45,7 +45,7 @@ router.put('/todos/:id', async (req, res) => {
     if (req.body.completed != null) {
       todo.completed = req.body.completed;
       if (todo.completed) {
-        todo.completedAt = new Date();
+        todo.completedAt = Date.now();
       } else {
         todo.completedAt = null;
       }
@@ -81,16 +81,11 @@ router.delete('/todos/:id', async (req, res) => {
 // GET statistics
 router.get('/stats', async (req, res) => {
   try {
-    const stats = await Todo.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { _id: 1 } }
-    ]);
-    res.json(stats);
+    const completedToday = await Todo.countDocuments({
+      completed: true,
+      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
+    });
+    res.json({ completedToday });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
