@@ -32,14 +32,30 @@ router.post('/todos', async (req, res) => {
 router.put('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
-    if (req.body.title) todo.title = req.body.title;
-    if (req.body.description) todo.description = req.body.description;
-    if (req.body.completed !== undefined) {
-      todo.completed = req.body.completed;
-      if (todo.completed) todo.completedAt = new Date();
+    if (todo == null) {
+      return res.status(404).json({ message: 'Todo not found' });
     }
-    if (req.body.notes) todo.notes = req.body.notes;
-    if (req.body.cost) todo.cost = req.body.cost;
+
+    if (req.body.title != null) {
+      todo.title = req.body.title;
+    }
+    if (req.body.description != null) {
+      todo.description = req.body.description;
+    }
+    if (req.body.completed != null) {
+      todo.completed = req.body.completed;
+      if (todo.completed) {
+        todo.completedAt = new Date();
+      } else {
+        todo.completedAt = null;
+      }
+    }
+    if (req.body.notes != null) {
+      todo.notes = req.body.notes;
+    }
+    if (req.body.cost != null) {
+      todo.cost = req.body.cost;
+    }
 
     const updatedTodo = await todo.save();
     res.json(updatedTodo);
@@ -51,7 +67,11 @@ router.put('/todos/:id', async (req, res) => {
 // DELETE a todo
 router.delete('/todos/:id', async (req, res) => {
   try {
-    await Todo.findByIdAndDelete(req.params.id);
+    const todo = await Todo.findById(req.params.id);
+    if (todo == null) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+    await todo.remove();
     res.json({ message: 'Todo deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -61,16 +81,11 @@ router.delete('/todos/:id', async (req, res) => {
 // GET statistics
 router.get('/stats', async (req, res) => {
   try {
-    const stats = await Todo.aggregate([
-      {
-        $group: {
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { _id: 1 } }
-    ]);
-    res.json(stats);
+    const completedToday = await Todo.countDocuments({
+      completed: true,
+      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
+    });
+    res.json({ completedToday });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
