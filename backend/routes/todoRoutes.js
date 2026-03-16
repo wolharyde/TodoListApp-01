@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Todo = require('../models/Todo');
 
-// GET all todos
+// Get all todos
 router.get('/todos', async (req, res) => {
   try {
     const todos = await Todo.find();
@@ -12,7 +12,7 @@ router.get('/todos', async (req, res) => {
   }
 });
 
-// POST a new todo
+// Create a new todo
 router.post('/todos', async (req, res) => {
   const todo = new Todo({
     title: req.body.title,
@@ -28,7 +28,7 @@ router.post('/todos', async (req, res) => {
   }
 });
 
-// PUT (update) a todo
+// Update a todo
 router.put('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
@@ -44,7 +44,7 @@ router.put('/todos/:id', async (req, res) => {
     }
     if (req.body.completed != null) {
       todo.completed = req.body.completed;
-      if (todo.completed) {
+      if (req.body.completed) {
         todo.completedAt = new Date();
       } else {
         todo.completedAt = null;
@@ -64,7 +64,7 @@ router.put('/todos/:id', async (req, res) => {
   }
 });
 
-// DELETE a todo
+// Delete a todo
 router.delete('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
@@ -78,14 +78,19 @@ router.delete('/todos/:id', async (req, res) => {
   }
 });
 
-// GET statistics
+// Get statistics
 router.get('/stats', async (req, res) => {
   try {
-    const completedToday = await Todo.countDocuments({
-      completed: true,
-      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
-    });
-    res.json({ completedToday });
+    const stats = await Todo.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+    res.json(stats);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
