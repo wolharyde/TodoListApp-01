@@ -45,7 +45,7 @@ router.put('/todos/:id', async (req, res) => {
     if (req.body.completed != null) {
       todo.completed = req.body.completed;
       if (todo.completed) {
-        todo.completedAt = new Date();
+        todo.completedAt = Date.now();
       } else {
         todo.completedAt = null;
       }
