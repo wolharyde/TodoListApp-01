@@ -83,17 +83,12 @@ router.get('/stats', async (req, res) => {
   try {
     const stats = await Todo.aggregate([
       {
-        $match: { completed: true }
-      },
-      {
         $group: {
           _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
           count: { $sum: 1 }
         }
       },
-      {
-        $sort: { _id: 1 }
-      }
+      { $sort: { _id: 1 } }
     ]);
     res.json(stats);
   } catch (err) {
