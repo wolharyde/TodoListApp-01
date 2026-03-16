@@ -3,7 +3,7 @@ const router = express.Router();
 const Todo = require('../models/Todo');
 
 // GET all todos
-router.get('/todos', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const todos = await Todo.find();
     res.json(todos);
@@ -13,7 +13,7 @@ router.get('/todos', async (req, res) => {
 });
 
 // POST a new todo
-router.post('/todos', async (req, res) => {
+router.post('/', async (req, res) => {
   const todo = new Todo({
     title: req.body.title,
     description: req.body.description,
@@ -29,7 +29,7 @@ router.post('/todos', async (req, res) => {
 });
 
 // PUT update a todo
-router.put('/todos/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (todo == null) {
@@ -65,7 +65,7 @@ router.put('/todos/:id', async (req, res) => {
 });
 
 // DELETE a todo
-router.delete('/todos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (todo == null) {
