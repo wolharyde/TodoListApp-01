@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
   const todo = new Todo({
     title: req.body.title,
     description: req.body.description,
-    cost: req.body.cost,
+    cost: req.body.cost
   });
 
   try {
