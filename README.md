@@ -31,7 +31,7 @@ A web-based todo list application with advanced features for managing, tracking,
 
 ## Contributing
 
-(Instructions for contributing to the project will be added here)
+(Guidelines for contributing to the project will be added here)
 
 ## License
 
