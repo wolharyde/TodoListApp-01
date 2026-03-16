@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const todoSchema = new mongoose.Schema({
+const TodoSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   completed: { type: Boolean, default: false },
@@ -10,4 +10,4 @@ const todoSchema = new mongoose.Schema({
   cost: { type: Number }
 });
 
-module.exports = mongoose.model('Todo', todoSchema);
+module.exports = mongoose.model('Todo', TodoSchema);
