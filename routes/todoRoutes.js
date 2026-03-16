@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Todo = require('../models/Todo');
+const Todo = require('../models/todo');
 
 // GET all todos
 router.get('/todos', async (req, res) => {
@@ -81,19 +81,16 @@ router.delete('/todos/:id', async (req, res) => {
 // GET statistics
 router.get('/stats', async (req, res) => {
   try {
-    const completedToday = await Todo.countDocuments({
-      completed: true,
-      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
-    });
-
-    const totalCompleted = await Todo.countDocuments({ completed: true });
-    const totalTodos = await Todo.countDocuments();
-
-    res.json({
-      completedToday,
-      totalCompleted,
-      totalTodos
-    });
+    const stats = await Todo.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$completedAt" } },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+    res.json(stats);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
