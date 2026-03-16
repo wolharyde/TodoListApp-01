@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Todo = require('../models/Todo');
 
-// GET all todos
-router.get('/', async (req, res) => {
+// Get all todos
+router.get('/todos', async (req, res) => {
   try {
     const todos = await Todo.find();
     res.json(todos);
@@ -12,8 +12,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST a new todo
-router.post('/', async (req, res) => {
+// Create a new todo
+router.post('/todos', async (req, res) => {
   const todo = new Todo({
     title: req.body.title,
     description: req.body.description,
@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT update a todo
-router.put('/:id', async (req, res) => {
+// Update a todo
+router.put('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (todo == null) {
@@ -44,7 +44,7 @@ router.put('/:id', async (req, res) => {
     }
     if (req.body.completed != null) {
       todo.completed = req.body.completed;
-      if (todo.completed) {
+      if (req.body.completed) {
         todo.completedAt = new Date();
       } else {
         todo.completedAt = null;
@@ -64,8 +64,8 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE a todo
-router.delete('/:id', async (req, res) => {
+// Delete a todo
+router.delete('/todos/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (todo == null) {
@@ -73,6 +73,19 @@ router.delete('/:id', async (req, res) => {
     }
     await todo.remove();
     res.json({ message: 'Todo deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Get statistics
+router.get('/stats', async (req, res) => {
+  try {
+    const completedToday = await Todo.countDocuments({
+      completed: true,
+      completedAt: { $gte: new Date().setHours(0, 0, 0, 0) }
+    });
+    res.json({ completedToday });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
